@@ -1,13 +1,10 @@
 
 <?php
 
-	$output = null;
-
-
 	function executeCode() {
-
 		// $langSelected = $_POST('langSelect');
 		// echo "langSelected";
+
 		$codeFile = "code.c";
 		$exeFile = "a.exe";
 		$output = exec("gcc code.c & a > output.txt");
@@ -15,15 +12,14 @@
 		$outputFile = "output.txt";
 		if(file_exists($outputFile)) {
 
-			$file = new SplFileObject($outputFile);
-
-			$output = array();
-			while(!$file->eof()) {
-				//array_push($output, $file->fgets());
-				echo $file -> fgets() . "</br>";
+			$output = file($outputFile, FILE_IGNORE_NEW_LINES);
+			
+			foreach($output as $o) {
+				echo '<script>';
+				echo 'window.addEventListener("load", function () {  const para = document.createElement("p"); const line = document.createTextNode("'.$o.'"); para.appendChild(line); document.getElementById("output-container").appendChild(para)})';
+				echo '</script>';
 			}
 
-			echo count((array) $output);
 			$file = null;
 
 			unlink($outputFile);
@@ -55,8 +51,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" type="text/css" media="screen" href="./css/styles.css" />
 		<script src="./js/main.js"></script>
-
 	</head>
+	
 	<body>
 		
 		<div class="header row">
@@ -114,12 +110,11 @@
 				?>
 			</textarea>
 			</div>
-			<div class="col output-container">
 
-				<p name="output-container" id="output-container">
-					Output will be displayed here...
-				</p>
+			<div class="col output-container" id="output-container">
+				<b>Output<b>
 			</div>
+			
 		</div>
 	</body>
 </html>
