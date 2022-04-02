@@ -1,13 +1,18 @@
-
 <?php
+	$lang = "C";
 
-	function executeCode() {
-		// $langSelected = $_POST('langSelect');
-		// echo "langSelected";
-
+	function executeCode($lang) {
 		$codeFile = "code.c";
 		$exeFile = "a.exe";
-		$output = exec("gcc code.c & a > output.txt");
+		
+		if($lang == "C") {
+			$output = exec("gcc code.c & a > output.txt");
+		}
+		
+		if($lang == "C++") {
+			$codeFile = "code.cpp";
+			$output = exec("g++ code.cpp & a > output.txt");
+		}
 
 		$outputFile = "output.txt";
 		if(file_exists($outputFile)) {
@@ -26,7 +31,15 @@
 		}
 
 		if(file_exists($codeFile)) {
-			copy($codeFile, "temp.c");
+			$tempFile = "temp.";
+			if($lang == "C") {
+				$tempFile = $tempFile."c";
+			}
+
+			if($lang == "C++") {
+				$tempFile = $tempFile."cpp";
+			}
+			copy($codeFile, $tempFile);
 			unlink($codeFile);
 		}
 
@@ -37,7 +50,11 @@
 	}
 
 	if(array_key_exists('run', $_POST)) {
-		executeCode();
+		executeCode($_COOKIE['lang']);
+	}
+
+	if(array_key_exists('langSave', $_POST)) {
+		setcookie('lang', $_POST['langSelect'], time()+3600);
 	}
 	
 ?>
@@ -47,10 +64,15 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<title>Troubleshoot - Quest 2022</title>
+		<title>Troubleshoot - Quest '22</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<link rel="icon" type="image/x-icon" href="./assets/images/quest-logo.png">
+
 		<link rel="stylesheet" type="text/css" media="screen" href="./css/styles.css" />
 		<script src="./js/main.js"></script>
+
+		
 	</head>
 	
 	<body>
@@ -77,9 +99,11 @@
 				<label for="langSelect">Choose language : </label>
 				<form method="post">
 					<select name="langSelect" id="langSelect">
-						<option selected>C</option>
-						<option>C++</option>
+						<option value="C" <?php if($_COOKIE['lang'] == 'C') echo 'selected = "selected"' ?>>C</option>
+						<option value="C++" <?php if($_COOKIE['lang'] == 'C++') echo 'selected = "selected"' ?>>C++</option>
 					</select>
+
+					<input type ="submit" id="langSave" name="langSave" value="Save"/>
 				</form>
 			</div>
 
@@ -103,12 +127,16 @@
 					class="code-editor"
 					placeholder="Code Here..."
 				>
-				<?php
-					if(file_exists("temp.c")) {
-						echo file_get_contents("temp.c");
-					}
-				?>
-			</textarea>
+					<?php
+						if($_COOKIE['lang'] == "C" && file_exists("temp.c")) {
+							echo file_get_contents("temp.c");
+						}
+
+						if($_COOKIE['lang'] == "C++" && file_exists("temp.cpp")) {
+							echo file_get_contents("temp.cpp");
+						}
+					?>
+				</textarea>
 			</div>
 
 			<div class="col output-container" id="output-container">
