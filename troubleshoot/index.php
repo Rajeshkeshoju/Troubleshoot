@@ -1,6 +1,14 @@
 <?php
 	$lang = "C";
 
+	if(!isset($_COOKIE['lang'])) {
+		setcookie("lang", $lang, time()+3600);
+	}
+
+	function changeFile($file) {
+		echo $file;
+	}
+
 	function executeCode($lang) {
 		$codeFile = "code.c";
 		$exeFile = "a.exe";
@@ -70,7 +78,6 @@
 		<link rel="icon" type="image/x-icon" href="./assets/images/quest-logo.png">
 
 		<link rel="stylesheet" type="text/css" media="screen" href="./css/styles.css" />
-		<script src="./js/main.js"></script>
 
 		
 	</head>
@@ -82,7 +89,7 @@
 				<img src="./assets/images/jntuh-logo.png" />
 			</div>
 			<div class="col">
-				<h2>TROUBLESHOOT - QUEST 2022</h1>
+				<h2>TROUBLESHOOT - QUEST '22</h1>
 				<h3>Department of Computer Science & Engineering</h3>
 				<h3>JNTUH University College of Engineering Hyderabad (Autonomous)</h3>
 			</div>
@@ -107,12 +114,12 @@
 				</form>
 			</div>
 
-			<!-- <div class="col">
+			<div class="col">
 				<div class="tab">
-					<button class="tablinks" onclick="openCode(event, 'code1')">Problem 1</button>
-					<button class="tablinks" onclick="openCode(event, 'code2')">Problem 2</button>
+					<button class="tablinks" onclick="openCode(event, 'temp1')">Problem 1</button>
+					<button class="tablinks" onclick="openCode(event, 'temp2')">Problem 2</button>
 				</div>
-			</div> -->
+			</div>
 			<div class="col">
 				<form method="post">
 				<button class="button runButton" id="run" name="run">Run</button>
@@ -128,12 +135,12 @@
 					placeholder="Code Here..."
 				>
 					<?php
-						if($_COOKIE['lang'] == "C" && file_exists("temp.c")) {
-							echo file_get_contents("temp.c");
+						if($_COOKIE['lang'] == "C" && file_exists("temp1.c")) {
+							echo file_get_contents("temp1.c");
 						}
 
-						if($_COOKIE['lang'] == "C++" && file_exists("temp.cpp")) {
-							echo file_get_contents("temp.cpp");
+						if($_COOKIE['lang'] == "C++" && file_exists("temp1.cpp")) {
+							echo file_get_contents("temp1.cpp");
 						}
 					?>
 				</textarea>
@@ -144,5 +151,36 @@
 			</div>
 			
 		</div>
+
+		
+		<script src="./js/main.js"></script>
+		<script>
+
+			function openCode(event, file) {
+				var e = document.getElementById("langSelect");
+				var langSelected = e.value;
+				var fileExtension = "C";
+
+				if (langSelected == "C") {
+					fileExtension = "c";
+				}
+
+				if (langSelected == "C++") {
+					fileExtension = "cpp";
+				}
+
+				file += "." + fileExtension;
+				console.log(file);
+				
+
+				document.cookie = "file = " + file;
+				<?php
+					$file= $_COOKIE['file'];
+				?>
+
+				document.getElementById('textbox').innerHTML = '<?php echo file_get_contents($file);?>';
+			}
+
+		</script>
 	</body>
 </html>
