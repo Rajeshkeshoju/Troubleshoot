@@ -1,17 +1,15 @@
 <?php
 	$lang = "C";
-
 	if(!isset($_COOKIE['lang'])) {
-		setcookie("lang", $lang, time()+3600);
-	}
-
-	function changeFile($file) {
-		echo $file;
+		setcookie('lang', $lang, time()+3600);
 	}
 
 	function executeCode($lang) {
+
 		$codeFile = "code.c";
 		$exeFile = "a.exe";
+		$outputFile = "output.txt";
+		$classFile = "Code.class";
 		
 		if($lang == "C") {
 			$output = exec("gcc code.c & a > output.txt");
@@ -22,7 +20,11 @@
 			$output = exec("g++ code.cpp & a > output.txt");
 		}
 
-		$outputFile = "output.txt";
+		if($lang == "Java") {
+			$codeFile = "Code.java";
+			$output = exec("javac Code.java & java Code > output.txt");
+		}
+
 		if(file_exists($outputFile)) {
 
 			$output = file($outputFile, FILE_IGNORE_NEW_LINES);
@@ -34,18 +36,22 @@
 			}
 
 			$file = null;
-
 			unlink($outputFile);
 		}
 
 		if(file_exists($codeFile)) {
-			$tempFile = "temp.";
+			$tempFile = "temp";
 			if($lang == "C") {
-				$tempFile = $tempFile."c";
+				$tempFile = $tempFile.".c";
 			}
 
 			if($lang == "C++") {
-				$tempFile = $tempFile."cpp";
+				$tempFile = $tempFile.".cpp";
+			}
+
+			if($lang == "Java") {
+				$tempFile = "Temp";
+				$tempFile = $tempFile.".java";
 			}
 			copy($codeFile, $tempFile);
 			unlink($codeFile);
@@ -53,6 +59,10 @@
 
 		if(file_exists($exeFile)) {
 			unlink($exeFile);
+		}
+
+		if(file_exists($classFile)) {
+			unlink($classFile);
 		}
 
 	}
@@ -70,16 +80,14 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<title>Troubleshoot - Quest '22</title>
+
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<title>Troubleshoot - Quest '22</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 		<link rel="icon" type="image/x-icon" href="./assets/images/quest-logo.png">
-
 		<link rel="stylesheet" type="text/css" media="screen" href="./css/styles.css" />
-
-		
 	</head>
 	
 	<body>
@@ -108,18 +116,19 @@
 					<select name="langSelect" id="langSelect">
 						<option value="C" <?php if($_COOKIE['lang'] == 'C') echo 'selected = "selected"' ?>>C</option>
 						<option value="C++" <?php if($_COOKIE['lang'] == 'C++') echo 'selected = "selected"' ?>>C++</option>
+						<option value="Java" <?php if($_COOKIE['lang'] == 'Java') echo 'selected = "selected"' ?>>Java</option>
 					</select>
 
 					<input type ="submit" id="langSave" name="langSave" value="Save"/>
 				</form>
 			</div>
 
-			<div class="col">
+			<!-- <div class="col">
 				<div class="tab">
-					<button class="tablinks" onclick="openCode(event, 'temp1')">Problem 1</button>
-					<button class="tablinks" onclick="openCode(event, 'temp2')">Problem 2</button>
+					<button class="tablinks" onclick="openCode(event, 'code1')">Problem 1</button>
+					<button class="tablinks" onclick="openCode(event, 'code2')">Problem 2</button>
 				</div>
-			</div>
+			</div> -->
 			<div class="col">
 				<form method="post">
 				<button class="button runButton" id="run" name="run">Run</button>
@@ -135,12 +144,16 @@
 					placeholder="Code Here..."
 				>
 					<?php
-						if($_COOKIE['lang'] == "C" && file_exists("temp1.c")) {
-							echo file_get_contents("temp1.c");
+						if($_COOKIE['lang'] == "C" && file_exists("temp.c")) {
+							echo file_get_contents("temp.c");
 						}
 
-						if($_COOKIE['lang'] == "C++" && file_exists("temp1.cpp")) {
-							echo file_get_contents("temp1.cpp");
+						if($_COOKIE['lang'] == "C++" && file_exists("temp.cpp")) {
+							echo file_get_contents("temp.cpp");
+						}
+
+						if($_COOKIE['lang'] == "Java" && file_exists("Temp.java")) {
+							echo file_get_contents("Temp.java");
 						}
 					?>
 				</textarea>
@@ -152,35 +165,6 @@
 			
 		</div>
 
-		
 		<script src="./js/main.js"></script>
-		<script>
-
-			function openCode(event, file) {
-				var e = document.getElementById("langSelect");
-				var langSelected = e.value;
-				var fileExtension = "C";
-
-				if (langSelected == "C") {
-					fileExtension = "c";
-				}
-
-				if (langSelected == "C++") {
-					fileExtension = "cpp";
-				}
-
-				file += "." + fileExtension;
-				console.log(file);
-				
-
-				document.cookie = "file = " + file;
-				<?php
-					$file= $_COOKIE['file'];
-				?>
-
-				document.getElementById('textbox').innerHTML = '<?php echo file_get_contents($file);?>';
-			}
-
-		</script>
 	</body>
 </html>
