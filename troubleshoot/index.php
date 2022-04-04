@@ -1,7 +1,11 @@
 <?php
-	$lang = "C";
+	$lang = 'C';
 	if(!isset($_COOKIE['lang'])) {
 		setcookie('lang', $lang, time()+3600);
+	}
+
+	if(!isset($_COOKIE['problem'])) {
+		setcookie('problem', 1, time()+3600);
 	}
 
 	function executeCode($lang) {
@@ -41,18 +45,30 @@
 
 		if(file_exists($codeFile)) {
 			$tempFile = "temp";
-			if($lang == "C") {
-				$tempFile = $tempFile.".c";
+			
+			if($_COOKIE['problem'] == 2) {
+				if($lang == "C") {
+					$tempFile = $tempFile.".c";
+				}
+	
+				if($lang == "C++") {
+					$tempFile = $tempFile.".cpp";
+				}
+	
+				if($lang == "Java") {
+					$tempFile = "Temp";
+					$tempFile = $tempFile.".java";
+				}
 			}
 
-			if($lang == "C++") {
-				$tempFile = $tempFile.".cpp";
-			}
+			if($_COOKIE['problem'] == 1) {
+				$tempFile = "temp2.c";
 
-			if($lang == "Java") {
-				$tempFile = "Temp";
-				$tempFile = $tempFile.".java";
+				if($lang == "Java") {
+					$tempFile = "Temp2.java";
+				}
 			}
+			
 			copy($codeFile, $tempFile);
 			unlink($codeFile);
 		}
@@ -73,6 +89,44 @@
 
 	if(array_key_exists('langSave', $_POST)) {
 		setcookie('lang', $_POST['langSelect'], time()+3600);
+	}
+
+	if(array_key_exists('problem1', $_POST)) {
+		setcookie('problem', 1, time()+3600);
+
+		$lang = $_COOKIE['lang'];
+		$file = "temp.c";
+
+		if($lang == "C++") {
+			$file = "temp.cpp";
+		}
+
+		if($lang == "Java") {
+			$file = "Temp.java";
+		}
+
+		echo "<script> ";
+		echo "window.addEventListener('load', function () { document.getElementById('textbox').value = '". file_get_contents($file). "'; }";
+		echo "</script>";
+	}
+
+	if(array_key_exists('problem2', $_POST)) {
+		setcookie('problem', 2, time()+3600);
+
+		$lang = $_COOKIE['lang'];
+		$file = "temp2.c";
+
+		if($lang == "C++") {
+			$file = "temp2.cpp";
+		}
+
+		if($lang == "Java") {
+			$file = "Temp2.java";
+		}
+
+		echo "<script> ";
+		echo "window.addEventListener('load', function () { document.getElementById('textbox').value = '". file_get_contents($file). "'; }";
+		echo "</script>";
 	}
 	
 ?>
@@ -123,12 +177,14 @@
 				</form>
 			</div>
 
-			<!-- <div class="col">
+			<div class="col">
 				<div class="tab">
-					<button class="tablinks" onclick="openCode(event, 'code1')">Problem 1</button>
-					<button class="tablinks" onclick="openCode(event, 'code2')">Problem 2</button>
+					<form method="post">
+						<button class="tablinks" name="problem1" onclick="selectTab(e)">Problem 1</button>
+						<button class="tablinks" name="problem2" onclick="selectTab(e)">Problem 2</button>
+					</form>
 				</div>
-			</div> -->
+			</div>
 			<div class="col">
 				<form method="post">
 				<button class="button runButton" id="run" name="run">Run</button>
@@ -144,16 +200,28 @@
 					placeholder="Code Here..."
 				>
 					<?php
-						if($_COOKIE['lang'] == "C" && file_exists("temp.c")) {
+						if($_COOKIE['lang'] == "C" && file_exists("temp.c") && $_COOKIE['problem'] == 1) {
 							echo file_get_contents("temp.c");
 						}
 
-						if($_COOKIE['lang'] == "C++" && file_exists("temp.cpp")) {
+						if($_COOKIE['lang'] == "C" && file_exists("temp.c") && $_COOKIE['problem'] == 2) {
+							echo file_get_contents("temp2.c");
+						}
+
+						if($_COOKIE['lang'] == "C++" && file_exists("temp.cpp") && $_COOKIE['problem'] == 1) {
 							echo file_get_contents("temp.cpp");
 						}
 
-						if($_COOKIE['lang'] == "Java" && file_exists("Temp.java")) {
+						if($_COOKIE['lang'] == "C++" && file_exists("temp.cpp") && $_COOKIE['problem'] == 2) {
+							echo file_get_contents("temp2.cpp");
+						}
+
+						if($_COOKIE['lang'] == "Java" && file_exists("Temp.java") && $_COOKIE['problem'] == 1) {
 							echo file_get_contents("Temp.java");
+						}
+
+						if($_COOKIE['lang'] == "Java" && file_exists("Temp.java") && $_COOKIE['problem'] == 2) {
+							echo file_get_contents("Temp2.java");
 						}
 					?>
 				</textarea>
