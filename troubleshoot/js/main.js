@@ -30,6 +30,23 @@ window.onload = function () {
 		});
 	}
 
+	function changeLanguage(lang) {
+		alert(lang);
+		var file = "temp.";
+		if (lang == "C") {
+			file += "c";
+		}
+
+		if (lang == "C++") {
+			file += "cpp";
+		}
+
+		var fr = new FileReader();
+		fr.onload = function () {
+			document.getElementById("textbox").textContent = fr.result;
+		};
+	}
+
 	function saveTextAsFile() {
 		var textToWrite = document.getElementById("textbox").value;
 
@@ -40,6 +57,8 @@ window.onload = function () {
 
 		var e = document.getElementById("langSelect");
 		var langSelected = e.value;
+		var fileNameToSaveAs = "code";
+		var fileExtension = "c";
 
 		if (langSelected == "C") {
 			fileExtension = "c";
@@ -49,8 +68,13 @@ window.onload = function () {
 			fileExtension = "cpp";
 		}
 
+		if (langSelected == "Java") {
+			fileNameToSaveAs = "Code";
+			fileExtension = "java";
+		}
+
 		var textFileAsBlob = new Blob([textToWrite], { type: "text/plain" });
-		var fileNameToSaveAs = "code." + fileExtension;
+		fileNameToSaveAs = fileNameToSaveAs + "." + fileExtension;
 
 		var downloadLink = document.createElement("a");
 
@@ -73,13 +97,4 @@ window.onload = function () {
 	}
 
 	document.getElementById("run").addEventListener("click", saveTextAsFile);
-
-	function reload(id) {
-		console.log("reloading...");
-
-		ele = document.getElementById(id);
-		var content = ele.innerHTML;
-
-		ele.innerHTML = content;
-	}
 };
