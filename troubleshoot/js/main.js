@@ -1,16 +1,14 @@
 window.onload = function () {
-	function openCode(event, file) {
-		var e = document.getElementById("langSelect");
-		var langSelected = e.value;
 
-		if (langSelected == "C") {
-			fileExtension = "c";
-		}
-
-		if (langSelected == "C++") {
-			fileExtension = "cpp";
-		}
-	}
+	function selectTab (e) {
+		e.preventDefault();
+	  
+		// select current active tab and remove active class (if-any)
+		let activeTab = document.querySelector('.tab > .active');
+		if (activeTab) activeTab.classList.remove('active');
+	  
+		e.target.element.classList.add('active');
+	  }
 
 	var textarea = document.getElementById("textbox");
 	if (textarea) {
@@ -28,23 +26,6 @@ window.onload = function () {
 				this.selectionStart = this.selectionEnd = start + 1;
 			}
 		});
-	}
-
-	function changeLanguage(lang) {
-		alert(lang);
-		var file = "temp.";
-		if (lang == "C") {
-			file += "c";
-		}
-
-		if (lang == "C++") {
-			file += "cpp";
-		}
-
-		var fr = new FileReader();
-		fr.onload = function () {
-			document.getElementById("textbox").textContent = fr.result;
-		};
 	}
 
 	function saveTextAsFile() {
