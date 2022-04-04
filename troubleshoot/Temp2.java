@@ -4,4 +4,4 @@ public class Code {
 		System.out.println("Java2");
 		System.out.println("Troubleshoot test by " + tester + " in Java");
 	}
-}																																																																								
+}																																																																												

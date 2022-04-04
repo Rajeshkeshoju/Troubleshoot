@@ -1,4 +1,4 @@
-										#include <stdio.h>
+#include <stdio.h>
 
 int main() {
 
@@ -8,4 +8,4 @@ int main() {
 	printf("Troubleshoot test by %s in C", tester);
 
 	return 0;
-}								
+}												
