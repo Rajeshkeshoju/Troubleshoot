@@ -99,6 +99,7 @@
 	}
 
 	if(array_key_exists('problem1', $_POST)) {
+		setcookie('problem', 1, time()+3600);
 		$_COOKIE['problem'] = 1;
 
 		$lang = $_COOKIE['lang'];
@@ -118,6 +119,7 @@
 	}
 
 	if(array_key_exists('problem2', $_POST)) {
+		setcookie('problem', 2, time()+3600);
 		$_COOKIE['problem'] = 2;
 
 		$lang = $_COOKIE['lang'];
@@ -201,7 +203,7 @@
 
 		<div class="parentContainer row">
 			<div class="col">
-				<textarea id="textbox" class="code-editor" placeholder="Code Here..."><?php if($_COOKIE['lang'] == "C" && file_exists("temp.c") && $_COOKIE['problem'] == 1) {echo file_get_contents("temp.c");} if($_COOKIE['lang'] == "C" && file_exists("temp.c") && $_COOKIE['problem'] == 2) {echo file_get_contents("temp2.c");} if($_COOKIE['lang'] == "C++" && file_exists("temp.cpp") && $_COOKIE['problem'] == 1) {echo file_get_contents("temp.cpp");} if($_COOKIE['lang'] == "C++" && file_exists("temp.cpp") && $_COOKIE['problem'] == 2) {echo file_get_contents("temp2.cpp");} if($_COOKIE['lang'] == "Java" && file_exists("Temp.java") && $_COOKIE['problem'] == 1) {echo file_get_contents("Temp.java");} if($_COOKIE['lang'] == "Java" && file_exists("Temp.java") && $_COOKIE['problem'] == 2) {echo file_get_contents("Temp2.java");}?></textarea>
+				<textarea id="textbox" class="code-editor" placeholder="Code Here..."><?php if($_COOKIE['lang'] == "C" && file_exists("temp.c") && $_COOKIE['problem'] == 1) {echo file_get_contents("temp.c");} if($_COOKIE['lang'] == "C" && file_exists("temp2.c") && $_COOKIE['problem'] == 2) {echo file_get_contents("temp2.c");} if($_COOKIE['lang'] == "C++" && file_exists("temp.cpp") && $_COOKIE['problem'] == 1) {echo file_get_contents("temp.cpp");} if($_COOKIE['lang'] == "C++" && file_exists("temp2.cpp") && $_COOKIE['problem'] == 2) {echo file_get_contents("temp2.cpp");} if($_COOKIE['lang'] == "Java" && file_exists("Temp.java") && $_COOKIE['problem'] == 1) {echo file_get_contents("Temp.java");} if($_COOKIE['lang'] == "Java" && file_exists("Temp2.java") && $_COOKIE['problem'] == 2) {echo file_get_contents("Temp2.java");}?></textarea>
 			</div>
 
 			<div class="col output-container" id="output-container">
