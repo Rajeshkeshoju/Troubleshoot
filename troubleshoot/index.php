@@ -46,7 +46,7 @@
 		if(file_exists($codeFile)) {
 			$tempFile = "temp";
 			
-			if($_COOKIE['problem'] == 2) {
+			if($_COOKIE['problem'] == 1) {
 				if($lang == "C") {
 					$tempFile = $tempFile.".c";
 				}
@@ -61,13 +61,13 @@
 				}
 			}
 
-			if($_COOKIE['problem'] == 1) {
+			if($_COOKIE['problem'] == 2) {
 				$tempFile = "temp2.c";
 
 				if($lang == "C++") {
 					$tempFile = "temp2.cpp";
 				}
-				
+
 				if($lang == "Java") {
 					$tempFile = "Temp2.java";
 				}
@@ -93,10 +93,13 @@
 
 	if(array_key_exists('langSave', $_POST)) {
 		setcookie('lang', $_POST['langSelect'], time()+3600);
+		$_COOKIE['lang'] = $_POST['langSelect'];
+		
+		$_COOKIE['problem'] = 1;
 	}
 
 	if(array_key_exists('problem1', $_POST)) {
-		setcookie('problem', 1, time()+3600);
+		$_COOKIE['problem'] = 1;
 
 		$lang = $_COOKIE['lang'];
 		$file = "temp.c";
@@ -115,7 +118,7 @@
 	}
 
 	if(array_key_exists('problem2', $_POST)) {
-		setcookie('problem', 2, time()+3600);
+		$_COOKIE['problem'] = 2;
 
 		$lang = $_COOKIE['lang'];
 		$file = "temp2.c";
@@ -198,8 +201,7 @@
 
 		<div class="parentContainer row">
 			<div class="col">
-				<textarea id="textbox" class="code-editor" placeholder="Code Here..."><?php if($_COOKIE['lang'] == "C" && file_exists("temp.c") && $_COOKIE['problem'] == 1) {echo file_get_contents("temp.c");} if($_COOKIE['lang'] == "C" && file_exists("temp.c") && $_COOKIE['problem'] == 2) {echo file_get_contents("temp2.c");} if($_COOKIE['lang'] == "C++" && file_exists("temp.cpp") && $_COOKIE['problem'] == 1) {echo file_get_contents("temp.cpp");} if($_COOKIE['lang'] == "C++" && file_exists("temp.cpp") && $_COOKIE['problem'] == 2) {echo file_get_contents("temp2.cpp");} if($_COOKIE['lang'] == "Java" && file_exists("Temp.java") && $_COOKIE['problem'] == 1) {echo file_get_contents("Temp.java");} if($_COOKIE['lang'] == "Java" && file_exists("Temp.java") && $_COOKIE['problem'] == 2) {echo file_get_contents("Temp2.java");}
-					?></textarea>
+				<textarea id="textbox" class="code-editor" placeholder="Code Here..."><?php if($_COOKIE['lang'] == "C" && file_exists("temp.c") && $_COOKIE['problem'] == 1) {echo file_get_contents("temp.c");} if($_COOKIE['lang'] == "C" && file_exists("temp.c") && $_COOKIE['problem'] == 2) {echo file_get_contents("temp2.c");} if($_COOKIE['lang'] == "C++" && file_exists("temp.cpp") && $_COOKIE['problem'] == 1) {echo file_get_contents("temp.cpp");} if($_COOKIE['lang'] == "C++" && file_exists("temp.cpp") && $_COOKIE['problem'] == 2) {echo file_get_contents("temp2.cpp");} if($_COOKIE['lang'] == "Java" && file_exists("Temp.java") && $_COOKIE['problem'] == 1) {echo file_get_contents("Temp.java");} if($_COOKIE['lang'] == "Java" && file_exists("Temp.java") && $_COOKIE['problem'] == 2) {echo file_get_contents("Temp2.java");}?></textarea>
 			</div>
 
 			<div class="col output-container" id="output-container">
