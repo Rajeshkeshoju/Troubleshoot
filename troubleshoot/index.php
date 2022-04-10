@@ -2,10 +2,21 @@
 	$lang = 'C';
 	if(!isset($_COOKIE['lang'])) {
 		setcookie('lang', $lang, time()+3600);
+		$_COOKIE['lang'] = $lang;
 	}
 
 	if(!isset($_COOKIE['problem'])) {
 		setcookie('problem', 1, time()+3600);
+		$_COOKIE['problem'] = 1;
+	}
+
+
+	if($_COOKIE['problem'] == 1) {
+		echo "<script>window.addEventListener('load', function () {  let activeTab = document.querySelector('.active'); if (activeTab) activeTab.classList.remove('active'); document.getElementById('problem1').className += 'active'; });</script>";
+	}
+
+	if($_COOKIE['problem'] == 2) {
+		echo "<script>window.addEventListener('load', function () {  let activeTab = document.querySelector('.active'); if (activeTab) activeTab.classList.remove('active'); document.getElementById('problem2').className += 'active'; });</script>";
 	}
 
 	function executeCode($lang) {
@@ -77,13 +88,22 @@
 			unlink($codeFile);
 		}
 
-		if(file_exists($exeFile)) {
-			unlink($exeFile);
+		if($_COOKIE['lang'] == 'C' || $_COOKIE['lang'] == 'C++'){
+			if(file_exists($exeFile)) {
+				unlink($exeFile);
+			}else {
+				echo "<script>alert('Error');</script>";
+			}
 		}
 
-		if(file_exists($classFile)) {
-			unlink($classFile);
+		if($_COOKIE['lang'] == 'Java') {
+			if(file_exists($classFile)) {
+				unlink($classFile);
+			}else {
+				echo "<script>alert('Error');</script>";
+			}
 		}
+		
 
 	}
 
@@ -92,9 +112,11 @@
 	}
 
 	if(array_key_exists('langSave', $_POST)) {
+		
 		setcookie('lang', $_POST['langSelect'], time()+3600);
 		$_COOKIE['lang'] = $_POST['langSelect'];
 		
+		setcookie('problem', 1, time()+3600);
 		$_COOKIE['problem'] = 1;
 	}
 
@@ -119,6 +141,9 @@
 	}
 
 	if(array_key_exists('problem2', $_POST)) {
+
+		
+
 		setcookie('problem', 2, time()+3600);
 		$_COOKIE['problem'] = 2;
 
@@ -189,40 +214,26 @@
 			<div class="col">
 				<div class="tab">
 					<form method="post">
-						<button class="tab tablinks active" name="problem1" onclick="selectTab(e)">Problem 1</button>
-						<button class="tab tablinks" name="problem2" onclick="selectTab(e)">Problem 2</button>
+						<button class="tab active" id="problem1" name="problem1" >Problem 1</button>
+						<button class="tab" id="problem2" name="problem2" >Problem 2</button>
 					</form>
 				</div>
 			</div>
 			<div class="col">
 				<form method="post">
-				<button class="button runButton" id="run" name="run">Run</button>
+					<button class="button runButton" id="run" name="run">Run</button>
 				</form>
 			</div>
 		</div>
 
 		<div class="parentContainer row">
-			<div class="col">
-				<textarea id="textbox" class="code-editor" placeholder="Code Here..."><?php if($_COOKIE['lang'] == "C" && file_exists("temp.c") && $_COOKIE['problem'] == 1) {echo file_get_contents("temp.c");} if($_COOKIE['lang'] == "C" && file_exists("temp2.c") && $_COOKIE['problem'] == 2) {echo file_get_contents("temp2.c");} if($_COOKIE['lang'] == "C++" && file_exists("temp.cpp") && $_COOKIE['problem'] == 1) {echo file_get_contents("temp.cpp");} if($_COOKIE['lang'] == "C++" && file_exists("temp2.cpp") && $_COOKIE['problem'] == 2) {echo file_get_contents("temp2.cpp");} if($_COOKIE['lang'] == "Java" && file_exists("Temp.java") && $_COOKIE['problem'] == 1) {echo file_get_contents("Temp.java");} if($_COOKIE['lang'] == "Java" && file_exists("Temp2.java") && $_COOKIE['problem'] == 2) {echo file_get_contents("Temp2.java");}?></textarea>
-			</div>
+			<textarea id="textbox" class=" col code-editor" placeholder="Code Here..." spellcheck="false"><?php if($_COOKIE['lang'] == "C" && file_exists("temp.c") && $_COOKIE['problem'] == 1) {echo file_get_contents("temp.c");} if($_COOKIE['lang'] == "C" && file_exists("temp2.c") && $_COOKIE['problem'] == 2) {echo file_get_contents("temp2.c");} if($_COOKIE['lang'] == "C++" && file_exists("temp.cpp") && $_COOKIE['problem'] == 1) {echo file_get_contents("temp.cpp");} if($_COOKIE['lang'] == "C++" && file_exists("temp2.cpp") && $_COOKIE['problem'] == 2) {echo file_get_contents("temp2.cpp");} if($_COOKIE['lang'] == "Java" && file_exists("Temp.java") && $_COOKIE['problem'] == 1) {echo file_get_contents("Temp.java");} if($_COOKIE['lang'] == "Java" && file_exists("Temp2.java") && $_COOKIE['problem'] == 2) {echo file_get_contents("Temp2.java");}?></textarea>
 
 			<div class="col output-container" id="output-container">
-				<b>Output<b>
+				<b>Output</b>
 			</div>
-			
 		</div>
 
 		<script src="./js/main.js"></script>
-		<script>
-			function selectTab(e) {
-				e.preventDefault();
-				// select current active tab and remove active class (if-any)
-				let activeTab = document.querySelector(".tab >.button > .active");
-				if (activeTab) activeTab.classList.remove("active");
-
-				e.target.element.classList.add("active");
-			}
-
-		</script>
 	</body>
 </html>
