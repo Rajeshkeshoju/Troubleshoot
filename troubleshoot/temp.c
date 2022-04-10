@@ -1,11 +1,126 @@
+/*
+	PROBLEM #1
+	program to implement Circular Singly Linked List with basic operations
+	
+	input : 	NO external input
+	output : 	Original List:
+			[ (6,56) (5,40) (4,1) (3,30) (2,20) ]
+			Deleted value:(6,56)
+			[ (5,40) (4,1) (3,30) (2,20) ]
+			Deleted value:(5,40)
+			[ (4,1) (3,30) (2,20) ]
+			Deleted value:(4,1)
+			[ (3,30) (2,20) ]
+			Deleted value:(3,30)
+			[ (2,20) ]
+			Deleted value:(2,20)
+			[ ]
+			Deleted value:(1,10)
+			[ ]
+			List after deleting all items:
+			[ ]
+
+	
+*/
+
+
 #include <stdio.h>
+#include <string.h>
 
-int main() {
+struct node {
+   int data;
+   int key;
+	
+   struct node *next;
+}
 
-	char* tester = "Rajesh Keshoju";
+struct node head = null;
+struct node current = null;
 
-	printf("C1");
-	printf("Troubleshoot test by %s in C", tester);
 
-	return 0;
-}												
+
+bool isEmpty() {
+   return head == NULL;
+}
+
+
+int length() {
+   int length = 0;
+
+   if(head == NULL) {
+      return 0;
+   }
+
+   current = head -> next;
+	
+   return lenght();
+}
+
+
+
+void insertFirst(int key, int data) {
+   struct node *link = (struct node) malloc(sizeof(int));
+   link->key = key^data;
+   link->data = data;
+	
+   if (!isEmpty()) {
+      head = link -> next;
+      head->next = head;
+   } else {
+      link->next = head;
+      head = link;
+   }    
+}
+
+
+
+struct node* deleteFirst() {
+   struct node *tempLink = head;
+	
+   if(head->next = head) {  
+      head = NULL;
+      return *tempLink;
+   }     
+	
+   return *head;
+}
+
+
+int printList() {
+   struct node *ptr = head;
+   printf("\n[ ");
+	
+   if(head != NULL) {
+	
+      while(ptr->next != head) {     
+         print("(%d%d) ",ptr->data,ptr->key);
+         ptr = head->next;
+      }
+   }
+	
+   printf(" ]");
+   return ptr;
+}
+
+
+
+void main() {
+   insertFirst(1,10);
+   insertFirst(2,20);
+   insertFirst(4,1);
+   insertFirst(5,40);
+   insertFirst(6,56); 
+
+   printf("Original List: "); 
+   printList();
+
+   while(!isEmpty()) {     
+      struct node *temp = deleteFirst();
+      printf("\nDeleted value:")
+      printf("(%s,%d) ",temp->data,temp->data);
+      printlist();
+   }   
+	
+   printf("\nList after deleting all items: ");
+   printList();   
+}							
