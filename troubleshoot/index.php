@@ -92,7 +92,7 @@
 			if(file_exists($exeFile)) {
 				unlink($exeFile);
 			}else {
-				echo "<script>alert('Error');</script>";
+				echo "<script>alert('Error(s) found');</script>";
 			}
 		}
 
@@ -100,7 +100,7 @@
 			if(file_exists($classFile)) {
 				unlink($classFile);
 			}else {
-				echo "<script>alert('Error');</script>";
+				echo "<script>alert('Error(s) found');</script>";
 			}
 		}
 		
